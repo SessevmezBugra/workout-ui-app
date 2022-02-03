@@ -1,2 +1,9 @@
-<p>gym-list works!</p>
-<router-outlet></router-outlet>
+<button mat-raised-button color="primary" (click)="openGymDialog()">
+   Salon Olustur
+ </button>
+<mat-nav-list>
+  <mat-list-item [routerLink]="gym.id" *ngFor="let gym of gymList$ | async">
+    <h1 matLine>{{ gym.name }}</h1>
+    <h3 matLine> {{ gym.status }} </h3>
+  </mat-list-item>
+</mat-nav-list>

@@ -2,10 +2,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GymDetailComponent } from './gym-detail/gym-detail.component';
 import { GymListComponent } from './gym-list/gym-list.component';
+import { GymComponent } from './gym.component';
 
 const routes: Routes = [
-  {path: "gym", component: GymListComponent},
-  {path: "gym/:id", component: GymDetailComponent}
+  {
+    path: "", component: GymComponent,
+    children: [
+      { path: "", component: GymListComponent },
+      {
+        path: ":id", component: GymDetailComponent, children: [
+          { path: 'user', loadChildren: () => import('../user/user.module').then(m => m.UserModule), }
+        ]
+      }
+    ]
+  },
 ];
 
 @NgModule({

@@ -5,7 +5,16 @@ import { GymRoutingModule } from './gym-routing.module';
 import { GymComponent } from './gym.component';
 import { GymListComponent } from './gym-list/gym-list.component';
 import { GymDetailComponent } from './gym-detail/gym-detail.component';
-
+import { StoreModule } from '@ngrx/store';
+import { gymReducer, gymFeatureKey, gymInitialState } from './+state/gym.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { GymEffects } from './+state/gym.effects';
+import { GymService } from './+state/gym.service';
+import { GymFacade } from './+state/gym.facade';
+import {MatListModule} from '@angular/material/list';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { NgrxDialogModule } from '../ngrx-dialog/ngrx-dialog.module';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -15,7 +24,16 @@ import { GymDetailComponent } from './gym-detail/gym-detail.component';
   ],
   imports: [
     CommonModule,
-    GymRoutingModule
-  ]
+    GymRoutingModule,
+    StoreModule.forFeature(gymFeatureKey, gymReducer, {
+      initialState: gymInitialState,
+    }),
+    EffectsModule.forFeature([GymEffects]),
+    MatListModule,
+    MatSidenavModule,
+    MatButtonModule,
+    NgrxDialogModule
+  ],
+  providers: [GymService, GymEffects, GymFacade],
 })
 export class GymModule { }
