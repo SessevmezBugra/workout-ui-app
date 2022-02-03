@@ -1,0 +1,44 @@
+import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { NgrxFormsFacade } from 'src/app/ngrx-form/+state/ngrx-forms.facade';
+import { Field } from 'src/app/ngrx-form/+state/ngrx-forms.interfaces';
+import { FormDialogComponent } from '../dynamic-dialog/form-dialog/form-dialog.component';
+import { MessageDialogComponent } from '../dynamic-dialog/message-dialog/message-dialog.component';
+import * as NgrxDialogActions from './ngrx-dialog.actions';
+import { FormDialog, MessageDialog } from './ngrx-dialog.interfaces';
+import { NgrxDialogState } from './ngrx-dialog.reducer';
+import { ngrxDialogQuery } from './ngrx-dialog.selectors';
+
+@Injectable()
+export class NgrxDialogFacade {
+
+    messageDialogData$ = this.store.select(ngrxDialogQuery.getMessageDialogData);
+    formDialogData$ = this.store.select(ngrxDialogQuery.getFormDialogData);
+    formDialogFormStructure$ = this.store.select(ngrxDialogQuery.getFormDialogFormStructure);
+    formDialogFormData$ = this.store.select(ngrxDialogQuery.getFormDialogFormData);
+
+    constructor(private store: Store<NgrxDialogState>, public dialog: MatDialog) {}
+
+    private setMessageDialogData(data: MessageDialog) {
+        this.store.dispatch(NgrxDialogActions.setMessageDialogData({ data }));
+    }
+
+    private setFormDialogData(data: FormDialog) {
+        this.store.dispatch(NgrxDialogActions.setFormDialogData({ data }));
+    }
+
+    openFormDialog(dialogData: FormDialog) : MatDialogRef<FormDialogComponent, String> {
+        this.setFormDialogData(dialogData);
+        return this.dialog.open(FormDialogComponent);
+    }
+
+    openMessageDialog(dialogData: MessageDialog) : MatDialogRef<MessageDialogComponent, String>{
+        this.setMessageDialogData(dialogData);
+        return this.dialog.open(MessageDialogComponent);
+    }
+
+    updateFormDialogFormData(formData: any) {
+        this.store.dispatch(NgrxDialogActions.updateFormDialogFormData({data: formData}));
+    }
+}
