@@ -7,7 +7,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'docker build -t bsessevmez/workout-ui-app:0.0.1 .'
-                sh 'docker rm -f komsum-ui-app'
+                sh 'docker rm -f workout-ui-app'
             }
         }
 
