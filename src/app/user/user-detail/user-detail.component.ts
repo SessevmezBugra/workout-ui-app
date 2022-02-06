@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { UserFacade } from '../+state/user.facade';
 
 @Component({
   selector: 'app-user-detail',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDetailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userFacade: UserFacade, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
+      var userId = paramMap.get("userId");
+      if (!userId) {
+        
+      }else {
+        this.userFacade.setUserId(userId);
+      }
+    });
+  }
+
+  goWorkoutList() {
+
   }
 
 }

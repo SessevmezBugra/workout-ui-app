@@ -13,7 +13,7 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { NgrxRouterModule } from './ngrx-router/ngrx-router.module';
 import { NgrxErrorModule } from './ngrx-error/ngrx-error.module';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule } from 'keycloak-angular';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 

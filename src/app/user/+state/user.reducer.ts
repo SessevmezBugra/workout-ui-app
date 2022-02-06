@@ -8,9 +8,6 @@ import { User } from "src/app/model/user.model";
 export const userFeatureKey = "user";
 
 export interface UserState {
-    gymUsers: Array<GymUser>;
-    gymUserRole: UserRole;
-    searchedUsers: Array<User>;
     userId: string;
 }
 
@@ -19,26 +16,11 @@ export interface UserRootState {
 }
 
 export const userInitialState: UserState = {
-    gymUsers: [],
-    gymUserRole: 'ATHLETE',
-    searchedUsers: [],
     userId: ''
 }
 
 const reducer = createReducer(
     userInitialState,
-    on(UserActions.loadGymUsersSuccess, (state, action) => ({
-        ...state,
-        gymUsers: action.users
-    })),
-    on(UserActions.setGymUserRole, (state, action) => ({
-        ...state,
-        gymUserRole: action.role
-    })),
-    on(UserActions.searchUserSuccess, (state, action) => ({
-        ...state,
-        searchedUsers: action.users
-    })),
     on(UserActions.setUserId, (state, action) => ({
         ...state,
         userId: action.userId

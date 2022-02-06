@@ -10,29 +10,4 @@ import { User } from "src/app/model/user.model";
 export class UserService {
 
     constructor(private apiService: ApiService) { }
-
-    getGymUsersByGymIdAndUserRole(gymId: string | null | undefined, userRole: UserRole): Observable<Array<GymUser>> {
-        var params = new HttpParams();
-        if (gymId)
-            params = params.append("gymId", gymId);
-        if (userRole)
-            params = params.append("userRole", userRole);
-        return this.apiService.get('/gym-user', params);
-    }
-
-    getUsersBySearchText(searchText: string): Observable<Array<User>> {
-        var params = new HttpParams();
-        if (searchText)
-            params = params.append("search", searchText);
-        return this.apiService.get('/user', params);
-    }
-
-    sendGymInvitationToUsers(gymId: string | null, userRole: UserRole, userIds: Array<string>): Observable<void> {
-        var params = new HttpParams();
-        if (gymId) {
-            params = params.append("gymId", gymId);
-        }
-        params = params.append("userRole", userRole).append("userIds", userIds.join(", "));
-        return this.apiService.get('/gym-user/invite', params);
-    }
 }

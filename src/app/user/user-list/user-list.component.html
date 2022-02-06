@@ -1,9 +1,0 @@
-<button mat-raised-button color="primary" (click)="openInviteUserDialog()">
-  Davet Gonder
-</button>
-<mat-nav-list>
-  <mat-list-item [routerLink]="user.id" *ngFor="let user of gymUsers$ | async">
-    <h1 matLine>{{ user.firstName }} {{ user.lastName }}</h1>
-    <h3 matLine> {{ user.status }} </h3>
-  </mat-list-item>
-</mat-nav-list>

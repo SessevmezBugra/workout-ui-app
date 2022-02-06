@@ -1,1 +1,13 @@
-<p>user-detail works!</p>
+<mat-drawer-container style="height: 100%;">
+    <mat-drawer mode="side" opened>
+      <mat-nav-list>
+        <mat-list-item routerLink="training">
+          <h1 matLine>Antrenmanlar</h1>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-drawer>
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  

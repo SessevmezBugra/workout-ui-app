@@ -2,6 +2,11 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
 import { environment } from '../../environments/environment';
+import { AuthEffects } from './+state/auth.effects';
+import { authFeatureKey, authInitialState, authReducer } from './+state/auth.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { Store, StoreModule } from '@ngrx/store';
+import { AuthFacade } from './+state/auth.facade';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -19,12 +24,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
     });
 }
 
-function updateToken(keycloak: KeycloakService) {
-   return () => keycloak.keycloakEvents$.subscribe({
+function updateToken(keycloak: KeycloakService, authFacade: AuthFacade) {
+  return () => keycloak.keycloakEvents$.subscribe({
     next: (e) => {
       console.log("keycloak event: " + e.type);
       if (e.type == KeycloakEventType.OnTokenExpired) {
-        keycloak.updateToken(20);
+        authFacade.updateToken();
       }
     }
   });
@@ -35,9 +40,15 @@ function updateToken(keycloak: KeycloakService) {
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    StoreModule.forFeature(authFeatureKey, authReducer, {
+      initialState: authInitialState,
+    }),
+    EffectsModule.forFeature([AuthEffects]),
   ],
   providers: [
+    AuthFacade,
+    AuthEffects,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
@@ -48,7 +59,7 @@ function updateToken(keycloak: KeycloakService) {
       provide: APP_INITIALIZER,
       useFactory: updateToken,
       multi: true,
-      deps: [KeycloakService]
+      deps: [KeycloakService, AuthFacade]
     }
   ],
 })

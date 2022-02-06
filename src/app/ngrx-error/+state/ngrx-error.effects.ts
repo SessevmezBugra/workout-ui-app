@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
+import { login } from 'src/app/auth/+state/auth.actions';
 import { go } from 'src/app/ngrx-router/+state/router.actions';
 import * as NgrxErrorActions from './ngrx-error.actions';
 
@@ -9,7 +10,7 @@ export class NgrxErrorEffects {
   error401$ = createEffect(() =>
     this.actions$.pipe(
       ofType(NgrxErrorActions.throw401Error),
-      map(_ => go({ to: { path: ['/login'] } })),
+      map(_ => login()),
     ),
   );
 

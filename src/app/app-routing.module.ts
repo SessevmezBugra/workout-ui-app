@@ -4,8 +4,9 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 
 const routes: Routes = [
-  { path: "", redirectTo: "/workout", pathMatch: "full" },
-  { path: 'workout', loadChildren: () => import('./workout/workout.module').then(m => m.WorkoutModule), },
+  { path: "", redirectTo: "/training", pathMatch: "full" },
+  { path: 'training', loadChildren: () => import('./training/training.module').then(m => m.TrainingModule), },
+  { path: 'user/:userId', loadChildren: () => import('./user/user.module').then(m => m.UserModule), },
   { path: 'gym', loadChildren: () => import('./gym/gym.module').then(m => m.GymModule), },
   { path: '**', component: PageNotFoundComponent }
   // { path: '**', redirectTo: "/training", pathMatch: "full" }

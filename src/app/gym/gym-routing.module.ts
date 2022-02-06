@@ -11,7 +11,7 @@ const routes: Routes = [
       { path: "", component: GymListComponent },
       {
         path: ":id", component: GymDetailComponent, children: [
-          { path: 'user', loadChildren: () => import('../user/user.module').then(m => m.UserModule), }
+          { path: 'user', loadChildren: () => import('../user-list/user-list.module').then(m => m.UserListModule), }
         ]
       }
     ]
