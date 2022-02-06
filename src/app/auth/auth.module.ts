@@ -13,7 +13,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     keycloak.init({
       config: {
         url: `${environment.keycloak_url}/auth`,
-        realm: 'workout',
+        realm: 'training',
         clientId: 'ui-app'
       },
       initOptions: {
