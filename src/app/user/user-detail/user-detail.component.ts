@@ -20,6 +20,7 @@ export class UserDetailComponent implements OnInit {
         this.userFacade.setUserId(userId);
       }
     });
+    //test
   }
 
   goWorkoutList() {
