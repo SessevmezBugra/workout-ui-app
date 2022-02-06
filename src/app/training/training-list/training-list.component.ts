@@ -4,6 +4,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
+import { AuthFacade } from 'src/app/auth/+state/auth.facade';
 import { Training } from 'src/app/model/training.model';
 import { NgrxDialogFacade } from 'src/app/ngrx-dialog/+state/ngrx-dialog.facade';
 import { UserFacade } from 'src/app/user/+state/user.facade';
@@ -20,17 +21,21 @@ export class TrainingListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'desc', 'createdBy', 'createdDate', 'actions'];
   userId!: string | null | undefined;
   trainings$!: Observable<Array<Training>>;
+  isLoggedIn: boolean = false;
 
   constructor(
     private keycloakService: KeycloakService,
     private trainingFacade: TrainingFacade,
     private router: Router,
     private ngrxDialogFacade: NgrxDialogFacade,
-    private userFacade: UserFacade) { }
+    private userFacade: UserFacade,
+    private authFacade: AuthFacade) { }
 
   ngOnInit(): void {
     this.trainings$ = this.trainingFacade.trainings$;
-
+    this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+    });
     this.userFacade.userId$.subscribe((userId) => {
       this.userId = userId;
       if (!this.userId) {
@@ -55,6 +60,10 @@ export class TrainingListComponent implements OnInit {
   }
 
   openTrainingDialog(training?: Training) {
+    if(!this.isLoggedIn) {
+      this.ngrxDialogFacade.openLoginRequiredMessageDialog();
+      return;
+    }
     const dialogRef = this.ngrxDialogFacade.openFormDialog(
       {
         title: "Genel Bilgiler",

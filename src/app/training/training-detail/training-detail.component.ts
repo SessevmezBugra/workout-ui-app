@@ -5,6 +5,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthFacade } from 'src/app/auth/+state/auth.facade';
 import { TrainingMove } from 'src/app/model/training-move.model';
 import { TrainingSection } from 'src/app/model/training-section.model';
 import { NgrxDialogFacade } from 'src/app/ngrx-dialog/+state/ngrx-dialog.facade';
@@ -22,15 +23,20 @@ export class TrainingDetailComponent implements OnInit {
   
   sections$!: Observable<TrainingSection[]>;
   moves$!: Observable<TrainingMove[]>;
+  isLoggedIn: boolean = false;
   
   constructor(private trainingFacade: TrainingFacade,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private ngrxDialogFacade: NgrxDialogFacade) {
+    private ngrxDialogFacade: NgrxDialogFacade,
+    private authFacade: AuthFacade) {
   }
   ngOnInit(): void {
     this.sections$ = this.trainingFacade.sections$;
     this.moves$ = this.trainingFacade.moves$;
+    this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+    });
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       var trainingId = paramMap.get("trainingId");
       if (!trainingId) {

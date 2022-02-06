@@ -32,17 +32,17 @@ export class AppComponent {
     //   }
     // });
 
-    this.isLoggedIn = await this.keycloak.isLoggedIn();
+    // this.isLoggedIn = await this.keycloak.isLoggedIn();
 
-    if (this.isLoggedIn) {
-      this.userProfile = await this.keycloak.loadUserProfile();
-    } else {
-      this.login();
-    }
+    // if (this.isLoggedIn) {
+    //   this.userProfile = await this.keycloak.loadUserProfile();
+    // } else {
+    //   this.login();
+    // }
 
   }
 
-  public login() {
-    this.keycloak.login();
-  }
+  // public login() {
+  //   this.keycloak.login();
+  // }
 }

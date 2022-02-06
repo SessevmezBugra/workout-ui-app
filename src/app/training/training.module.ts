@@ -25,6 +25,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { NgrxDialogModule } from '../ngrx-dialog/ngrx-dialog.module';
 import { UserFacade } from '../user/+state/user.facade';
 import { UserModule } from '../user/user.module';
+import { AuthModule } from '../auth/auth.module';
 
 
 
@@ -53,7 +54,8 @@ import { UserModule } from '../user/user.module';
     ReactiveFormsModule,
     MatMenuModule,
     NgrxDialogModule,
-    UserModule
+    UserModule,
+    AuthModule
   ],
   providers: [TrainingService, TrainingEffects, TrainingFacade],
 })

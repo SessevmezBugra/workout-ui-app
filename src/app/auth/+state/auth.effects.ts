@@ -20,4 +20,22 @@ export class AuthEffects {
         ),
     );
 
+    updateToken = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.updateToken),
+            concatMap((action) =>
+                this.keycloakService.updateToken(20)
+                    .then((isOk) => {
+                        if (isOk) {
+                            return AuthActions.updateTokenSuccess();
+                        } else {
+                            let error = new Error("Update token failed");
+                            return AuthActions.updateTokenFailed({ error });
+                        }
+                    })
+                    .catch((error) => AuthActions.updateTokenFailed({ error }))
+            ),
+        ),
+    );
+
 }
