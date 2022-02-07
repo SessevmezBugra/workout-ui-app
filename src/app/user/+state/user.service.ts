@@ -10,4 +10,8 @@ import { User } from "src/app/model/user.model";
 export class UserService {
 
     constructor(private apiService: ApiService) { }
+
+    getUserByUserId(userId: string): Observable<User> {
+        return this.apiService.get('/user/' + userId);
+    }
 }

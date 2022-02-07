@@ -7,8 +7,9 @@ import { authFeatureKey, authInitialState, authReducer } from './+state/auth.red
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { AuthFacade } from './+state/auth.facade';
+import { updateIsLoggedIn } from './+state/auth.actions';
 
-function initializeKeycloak(keycloak: KeycloakService) {
+function initializeKeycloak(keycloak: KeycloakService, authFacade: AuthFacade) {
   return () =>
     keycloak.init({
       config: {
@@ -21,6 +22,14 @@ function initializeKeycloak(keycloak: KeycloakService) {
         silentCheckSsoRedirectUri:
           window.location.origin + '/assets/silent-check-sso.html'
       }
+    }).then((isOk) => {
+      if(isOk) {
+        authFacade.keycloakInitializeSucceed();
+      }else {
+        authFacade.keycloakInitializeFailed(new Error('Keycloak initialize failed'));
+      }
+    }).catch((error) => {
+        authFacade.keycloakInitializeFailed(error);
     });
 }
 
@@ -53,14 +62,14 @@ function updateToken(keycloak: KeycloakService, authFacade: AuthFacade) {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService]
+      deps: [KeycloakService, AuthFacade]
     },
     {
       provide: APP_INITIALIZER,
       useFactory: updateToken,
       multi: true,
       deps: [KeycloakService, AuthFacade]
-    }
+    },
   ],
 })
 export class AuthModule { }

@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { GymRoutingModule } from './gym-routing.module';
-import { GymComponent } from './gym.component';
-import { GymListComponent } from './gym-list/gym-list.component';
 import { GymDetailComponent } from './gym-detail/gym-detail.component';
 import { StoreModule } from '@ngrx/store';
 import { gymReducer, gymFeatureKey, gymInitialState } from './+state/gym.reducer';
@@ -18,8 +16,6 @@ import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    GymComponent,
-    GymListComponent,
     GymDetailComponent
   ],
   imports: [

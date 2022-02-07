@@ -6,7 +6,6 @@ import * as GymActions from "./gym.actions";
 export const gymFeatureKey = "gym";
 
 export interface GymState {
-    gymList: Array<Gym>;
     gymId: string | null;
     userRole: UserRole;
 }
@@ -16,17 +15,12 @@ export interface GymRootState {
   }
 
   export const gymInitialState : GymState = {
-    gymList: [],
     gymId: '' ,
     userRole: 'ATHLETE',
   }
 
   const reducer = createReducer(
     gymInitialState,
-    on(GymActions.loadGymsByLoggedUserSuccess, (state, action) => ({
-      ...state,
-      gymList: action.gyms
-    })),
     on(GymActions.setGymId, (state, action) => ({
       ...state,
       gymId: action.gymId

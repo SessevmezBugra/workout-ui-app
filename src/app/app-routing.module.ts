@@ -7,7 +7,8 @@ const routes: Routes = [
   { path: "", redirectTo: "/training", pathMatch: "full" },
   { path: 'training', loadChildren: () => import('./training/training.module').then(m => m.TrainingModule), },
   { path: 'user/:userId', loadChildren: () => import('./user/user.module').then(m => m.UserModule), },
-  { path: 'gym', loadChildren: () => import('./gym/gym.module').then(m => m.GymModule), },
+  { path: 'gym', loadChildren: () => import('./gym-list/gym-list.module').then(m => m.GymListModule), },
+  { path: 'gym/:id', loadChildren: () => import('./gym/gym.module').then(m => m.GymModule), },
   { path: '**', component: PageNotFoundComponent }
   // { path: '**', redirectTo: "/training", pathMatch: "full" }
 ];

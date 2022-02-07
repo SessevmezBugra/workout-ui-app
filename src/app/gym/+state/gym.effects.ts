@@ -12,48 +12,8 @@ export class GymEffects {
 
     constructor(
         private actions$: Actions,
-        private gymService: GymService,
-        private ngrxDialogFacade: NgrxDialogFacade,
         private router: Router
     ) { }
-
-    loadGymsByLoggedUser = createEffect(() =>
-        this.actions$.pipe(
-            ofType(GymActions.loadGymsByLoggedUser),
-            concatMap(() =>
-                this.gymService.getGymsByLoggedUser().pipe(
-                    map((response) => GymActions.loadGymsByLoggedUserSuccess({ gyms: response })),
-                    catchError((error) => of(GymActions.loadGymsByLoggedUserFail(error))),
-                ),
-            ),
-        ),
-    );
-
-    createGym = createEffect(() =>
-        this.actions$.pipe(
-            ofType(GymActions.createGym),
-            withLatestFrom(this.ngrxDialogFacade.formDialogFormData$),
-            concatMap(([_, data]) => 
-                this.gymService.createGym(data).pipe(
-                    mergeMap((response) => [GymActions.loadGymsByLoggedUser(), GymActions.createGymSuccess()]),
-                    catchError((error) => of(GymActions.createGymFail(error))),
-                ),
-            ),
-        ),
-    );
-
-    updateGym = createEffect(() =>
-        this.actions$.pipe(
-            ofType(GymActions.updateGym),
-            withLatestFrom(this.ngrxDialogFacade.formDialogFormData$),
-            concatMap(([_, data]) => 
-                this.gymService.updateGym(data).pipe(
-                    mergeMap((response) => [GymActions.loadGymsByLoggedUser(), GymActions.updateGymSuccess()]),
-                    catchError((error) => of(GymActions.updateGymFail(error))),
-                ),
-            ),
-        ),
-    );
 
     setUserRole = createEffect(() =>
         this.actions$.pipe(

@@ -8,7 +8,13 @@ import { User } from "src/app/model/user.model";
 export const userFeatureKey = "user";
 
 export interface UserState {
-    userId: string;
+    user: {
+        id: string,
+		username: string,
+		firstName: string,
+		lastName: string,
+    };
+    isEqualToLoggedUser: boolean
 }
 
 export interface UserRootState {
@@ -16,14 +22,24 @@ export interface UserRootState {
 }
 
 export const userInitialState: UserState = {
-    userId: ''
+    user: {
+        id: '',
+        username: '',
+        firstName: '',
+        lastName: ''
+    },
+    isEqualToLoggedUser: false
 }
 
 const reducer = createReducer(
     userInitialState,
-    on(UserActions.setUserId, (state, action) => ({
+    on(UserActions.loadUserProfileSuccess, (state, action) => ({
         ...state,
-        userId: action.userId
+        user: action.user
+    })),
+    on(UserActions.updateIsEqualToLoggedUser, (state, action) => ({
+        ...state,
+        isEqualToLoggedUser: action.isEqual
     }))
 );
 

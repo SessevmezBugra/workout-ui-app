@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import * as Keycloak from 'keycloak-js';
 import { Observable } from 'rxjs';
 import { AuthFacade } from 'src/app/auth/+state/auth.facade';
 import { Training } from 'src/app/model/training.model';
@@ -19,9 +20,10 @@ export class TrainingListComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger!: QueryList<MatMenuTrigger>;
 
   displayedColumns: string[] = ['name', 'desc', 'createdBy', 'createdDate', 'actions'];
-  userId!: string | null | undefined;
+  userId!: string;
   trainings$!: Observable<Array<Training>>;
   isLoggedIn: boolean = false;
+  userProfile!: Keycloak.KeycloakProfile;
 
   constructor(
     private keycloakService: KeycloakService,
@@ -35,23 +37,19 @@ export class TrainingListComponent implements OnInit {
     this.trainings$ = this.trainingFacade.trainings$;
     this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
-    });
-    this.userFacade.userId$.subscribe((userId) => {
-      this.userId = userId;
-      if (!this.userId) {
-        this.keycloakService.isLoggedIn().then((isLoggedIn) => {
-          if (isLoggedIn) {
-            this.keycloakService.loadUserProfile().then((userProfile) => {
-              this.userId = userProfile.id;
-              // this.trainingFacade.loadTrainingsByUserId(this.userId);
-              this.trainingFacade.setUserId(this.userId!);
-            });
-          }
-        });
-      } else {
-        // this.trainingFacade.loadTrainingsByUserId(this.userId);
-        this.trainingFacade.setUserId(this.userId);
-      }
+      this.userFacade.user$.subscribe((userProfile) => {
+        this.userId = userProfile.id;
+        if (!this.userId) {
+            if (this.isLoggedIn) {
+              this.authFacade.userProfile$.subscribe((userProfile) => {
+                this.userId = userProfile.id!;
+                this.trainingFacade.setUserId(this.userId!);
+              });
+            }
+        } else {
+          this.trainingFacade.setUserId(this.userId);
+        }
+      });
     });
   }
 

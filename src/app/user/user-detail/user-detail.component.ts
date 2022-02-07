@@ -17,7 +17,7 @@ export class UserDetailComponent implements OnInit {
       if (!userId) {
         
       }else {
-        this.userFacade.setUserId(userId);
+        this.userFacade.getUser(userId);
       }
     });
     //test

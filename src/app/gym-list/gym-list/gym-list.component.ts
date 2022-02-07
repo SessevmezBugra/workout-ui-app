@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
+import { AuthFacade } from 'src/app/auth/+state/auth.facade';
 import { Gym } from 'src/app/model/gym.model';
 import { NgrxDialogFacade } from 'src/app/ngrx-dialog/+state/ngrx-dialog.facade';
-import { GymFacade } from '../+state/gym.facade';
+import { GymListFacade } from '../+state/gym-list.facade';
 
 @Component({
   selector: 'app-gym-list',
@@ -14,19 +15,27 @@ import { GymFacade } from '../+state/gym.facade';
 export class GymListComponent implements OnInit {
 
   gymList$!: Observable<Array<Gym>>;
+  isLoggedIn: boolean = false;
 
-  constructor(private gymFacade: GymFacade, private keycloakService: KeycloakService, private ngrxDialogFacade: NgrxDialogFacade) { }
+  constructor(private gymListFacade: GymListFacade,
+    private ngrxDialogFacade: NgrxDialogFacade,
+    private authFacade: AuthFacade) { }
 
   ngOnInit(): void {
-    this.gymList$ = this.gymFacade.gyms$;
-
-    this.keycloakService.isLoggedIn().then((isLoggedIn) => {
-      this.gymFacade.loadGymsByLoggedUser();
+    this.gymList$ = this.gymListFacade.gyms$;
+    this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      if (this.isLoggedIn) {
+        this.gymListFacade.loadGymsByLoggedUser();
+      }
     });
-
   }
 
   openGymDialog(gym?: Gym) {
+    if(!this.isLoggedIn){
+      this.ngrxDialogFacade.openLoginRequiredMessageDialog();
+      return;
+    }
     const dialogRef = this.ngrxDialogFacade.openFormDialog(
       {
         title: "Genel Bilgiler",
@@ -39,16 +48,16 @@ export class GymListComponent implements OnInit {
           name: gym ? gym.name : '',
         },
         formStructure: [
-          { name: "name", type: 'INPUT', label: "Salon Adi", placeholder: "", validator: [Validators.required]},
+          { name: "name", type: 'INPUT', label: "Salon Adi", placeholder: "", validator: [Validators.required] },
         ]
       }
     );
     dialogRef.afterClosed().subscribe(result => {
-      if(result == "OK") {
-        if(gym && gym.id) {
-          this.gymFacade.updateGym();
-        }else {
-          this.gymFacade.createGym();
+      if (result == "OK") {
+        if (gym && gym.id) {
+          this.gymListFacade.updateGym();
+        } else {
+          this.gymListFacade.createGym();
         }
       }
     });

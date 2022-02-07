@@ -8,11 +8,11 @@ import { UserRole } from "src/app/model/user-role.type";
 @Injectable()
 export class UserFacade {
 
-    userId$ = this.store.select(userQuery.getUserId);
+    user$ = this.store.select(userQuery.getUserProfile);
 
     constructor(private store: Store<UserState>) { }
 
-    setUserId(userId: string) {
-        this.store.dispatch(UserActions.setUserId({userId}));
+    getUser(userId: string) {
+        this.store.dispatch(UserActions.loadUserProfile({userId}));
     }
 }
