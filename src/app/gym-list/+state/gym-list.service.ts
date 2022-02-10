@@ -19,4 +19,8 @@ export class GymListService {
     updateGym(gym: Gym): Observable<Gym> {
         return this.apiService.put('/gym', gym);
     }
+
+    acceptInvitation(gymId: string): Observable<Gym> {
+        return this.apiService.put('/gym/' + gymId + '/accept-invitation', {});
+    }
 }

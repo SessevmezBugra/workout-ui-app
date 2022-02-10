@@ -13,10 +13,13 @@ import {MatListModule} from '@angular/material/list';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { NgrxDialogModule } from '../ngrx-dialog/ngrx-dialog.module';
 import {MatButtonModule} from '@angular/material/button';
+import { GymUserListComponent } from './gym-user-list/gym-user-list.component';
+import { UserListModule } from '../user-list/user-list.module';
 
 @NgModule({
   declarations: [
-    GymDetailComponent
+    GymDetailComponent,
+    GymUserListComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatListModule,
     MatSidenavModule,
     MatButtonModule,
-    NgrxDialogModule
+    NgrxDialogModule,
+    UserListModule
   ],
   providers: [GymService, GymEffects, GymFacade],
 })

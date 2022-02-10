@@ -22,4 +22,8 @@ export class GymListFacade {
     updateGym() {
         this.store.dispatch(GymListActions.updateGym());
     }
+
+    acceptInvitation(gymId: string) {
+        this.store.dispatch(GymListActions.acceptInvitation({gymId}));
+    } 
 }

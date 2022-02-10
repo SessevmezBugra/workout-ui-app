@@ -4,9 +4,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import * as Keycloak from 'keycloak-js';
-import { Observable } from 'rxjs';
+import { combineLatest, concatMap, filter, Observable } from 'rxjs';
 import { AuthFacade } from 'src/app/auth/+state/auth.facade';
+import { GymFacade } from 'src/app/gym/+state/gym.facade';
 import { Training } from 'src/app/model/training.model';
+import { User } from 'src/app/model/user.model';
 import { NgrxDialogFacade } from 'src/app/ngrx-dialog/+state/ngrx-dialog.facade';
 import { UserFacade } from 'src/app/user/+state/user.facade';
 import { TrainingFacade } from '../+state/training.facade';
@@ -19,11 +21,14 @@ export class TrainingListComponent implements OnInit {
 
   @ViewChild(MatMenuTrigger) trigger!: QueryList<MatMenuTrigger>;
 
-  displayedColumns: string[] = ['name', 'desc', 'createdBy', 'createdDate', 'actions'];
-  userId!: string;
+  displayedColumns: string[] = ['name', 'desc', 'createdBy', 'createdDate'];
   trainings$!: Observable<Array<Training>>;
+  user$!: Observable<User>;
+  loggedUser$!: Observable<Keycloak.KeycloakProfile>;
+  isLoggedIn$!: Observable<boolean>;
+  canModify: boolean = false;
+  loggedGymUser$!: Observable<User>;
   isLoggedIn: boolean = false;
-  userProfile!: Keycloak.KeycloakProfile;
 
   constructor(
     private keycloakService: KeycloakService,
@@ -31,26 +36,57 @@ export class TrainingListComponent implements OnInit {
     private router: Router,
     private ngrxDialogFacade: NgrxDialogFacade,
     private userFacade: UserFacade,
-    private authFacade: AuthFacade) { }
+    private authFacade: AuthFacade,
+    private gymFacade: GymFacade) { }
 
   ngOnInit(): void {
     this.trainings$ = this.trainingFacade.trainings$;
-    this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
-      this.userFacade.user$.subscribe((userProfile) => {
-        this.userId = userProfile.id;
-        if (!this.userId) {
-            if (this.isLoggedIn) {
-              this.authFacade.userProfile$.subscribe((userProfile) => {
-                this.userId = userProfile.id!;
-                this.trainingFacade.setUserId(this.userId!);
-              });
+    this.user$ = this.userFacade.user$;
+    this.loggedUser$ = this.authFacade.userProfile$;
+    this.isLoggedIn$ = this.authFacade.isLoggedIn$;
+    this.loggedGymUser$ = this.gymFacade.gymUser$;
+
+
+    // this.user$ = this.trainingFacade.user$;
+    // this.authFacade.isLoggedIn$.subscribe((isLoggedIn) => {
+    //   this.isLoggedIn = isLoggedIn;
+    //   if (this.isLoggedIn) {
+    //     this.userFacade.user$.subscribe((userProfile) => {
+    //       this.userId = userProfile.id;
+    //       if (!this.userId) {
+    //         this.authFacade.userProfile$.subscribe((userProfile) => {
+    //           this.userId = userProfile.id!;
+    //           this.trainingFacade.setUserId(this.userId!);
+    //         });
+    //       } else {
+    //         this.trainingFacade.setUserId(this.userId);
+    //       }
+    //     });
+    //   }
+    // });
+
+    this.isLoggedIn$
+      .pipe(
+        isLoggedIn$ => combineLatest([isLoggedIn$, this.loggedUser$, this.user$, this.loggedGymUser$]),
+      ).subscribe(([isLoggedIn, loggedUser, user, loggedGymUser]) => {
+        this.isLoggedIn = isLoggedIn;
+        if(isLoggedIn) {
+          if(user.id){
+            if(loggedGymUser.role == 'TRAINER' || loggedGymUser.role == 'CO_FOUNDER'){
+              this.canModify == true;
+              this.displayedColumns.push('actions');
             }
+            this.trainingFacade.setUserId(user.id);
+          }else {
+            this.displayedColumns.push('actions');
+            this.canModify = true;
+            this.trainingFacade.setUserId(loggedUser.id!);
+          }
         } else {
-          this.trainingFacade.setUserId(this.userId);
+          this.canModify = true;
         }
       });
-    });
+
   }
 
   goToDetail(training: Training) {
@@ -58,7 +94,7 @@ export class TrainingListComponent implements OnInit {
   }
 
   openTrainingDialog(training?: Training) {
-    if(!this.isLoggedIn) {
+    if (!this.isLoggedIn) {
       this.ngrxDialogFacade.openLoginRequiredMessageDialog();
       return;
     }
@@ -75,16 +111,16 @@ export class TrainingListComponent implements OnInit {
           desc: training ? training.desc : ''
         },
         formStructure: [
-          { name: "name", type: 'INPUT', label: "Antrenman Adi", placeholder: "Ornek: 1. Ay", validator: [Validators.required]},
-          { name: "desc", type: 'TEXTAREA', label: "Antrenman Aciklamasi", placeholder: "Ornek: Haftada 3 gun", validator: [Validators.required]},
+          { name: "name", type: 'INPUT', label: "Antrenman Adi", placeholder: "Ornek: 1. Ay", validator: [Validators.required] },
+          { name: "desc", type: 'TEXTAREA', label: "Antrenman Aciklamasi", placeholder: "Ornek: Haftada 3 gun", validator: [Validators.required] },
         ]
       }
     );
     dialogRef.afterClosed().subscribe(result => {
-      if(result == "OK") {
-        if(training && training.id) {
+      if (result == "OK") {
+        if (training && training.id) {
           this.trainingFacade.updateTraining();
-        }else {
+        } else {
           this.trainingFacade.createTraining();
         }
       }
@@ -108,8 +144,8 @@ export class TrainingListComponent implements OnInit {
     }
     );
     dialogRef.afterClosed().subscribe(result => {
-      if(result == "OK") {
-        if(training && training.id) {
+      if (result == "OK") {
+        if (training && training.id) {
           this.trainingFacade.deleteTraining(training.id);
         }
       }

@@ -9,16 +9,21 @@ import { UserRole } from "src/app/model/user-role.type";
 @Injectable()
 export class GymFacade {
 
-    gymId$ = this.store.select(gymQuery.getGymId);
-    userRole$ = this.store.select(gymQuery.getUserRole);
+    gym$ = this.store.select(gymQuery.getGym);
+    gymUser$ = this.store.select(gymQuery.getGymUser);
+    gymUsers$ = this.store.select(gymQuery.getGymUsers);
 
     constructor(private store: Store<GymState>) { }
 
-    setGymId(gymId: string | null) {
-        this.store.dispatch(GymActions.setGymId({gymId}));
+    getGym(gymId: string) {
+        this.store.dispatch(GymActions.getGym({gymId}));
     }
 
-    setUserRole(userRole: UserRole) {
-        this.store.dispatch(GymActions.setUserRole({userRole}));
+    getGymUsers(userRole: UserRole) {
+        this.store.dispatch(GymActions.loadGymUsers({userRole}));
+    }
+
+    inviteUsers(role: UserRole) {
+        this.store.dispatch(GymActions.inviteUsers({role: role}));
     }
 }

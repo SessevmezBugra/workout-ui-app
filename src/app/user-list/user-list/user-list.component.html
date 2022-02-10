@@ -2,7 +2,7 @@
   Davet Gonder
 </button>
 <mat-nav-list>
-  <mat-list-item (click)="navigateToUserDetail(user.userId)" *ngFor="let user of gymUsers$ | async">
+  <mat-list-item (click)="navigateToUserDetail(user.id)" *ngFor="let user of users$ | async">
     <h1 matLine>{{ user.firstName }} {{ user.lastName }}</h1>
     <h3 matLine> {{ user.status }} </h3>
   </mat-list-item>

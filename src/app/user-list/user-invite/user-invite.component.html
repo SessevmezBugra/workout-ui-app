@@ -6,7 +6,7 @@
     <mat-icon matSuffix>person_search</mat-icon>
     <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
   </mat-form-field>
-  <mat-selection-list #filteredUsers>
+  <mat-selection-list #filteredUsers (selectionChange)="onUserSelected($event)">
     <mat-list-option *ngFor="let user of searchedUsers$ | async" [value]="user.id">
       {{user.username}}
     </mat-list-option>
@@ -14,5 +14,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>Iptal</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial (click)="sendInvitation(filteredUsers.selectedOptions.selected)">Davet Yolla</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Davet Yolla</button>
 </mat-dialog-actions>

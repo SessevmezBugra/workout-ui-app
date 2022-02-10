@@ -1,16 +1,16 @@
 <mat-drawer-container style="height: 100%;">
   <mat-drawer mode="side" opened>
-    <mat-selection-list [multiple]="false">
-      <mat-list-option (click)="setUserRole('ATHLETE')" value="ATHLETE">
+    <mat-nav-list>
+      <mat-list-item [routerLink]="['user', { userRole: 'ATHLETE' }]">
         <h1 matLine>Atletler</h1>
-      </mat-list-option>
-      <mat-list-option (click)="setUserRole('TRAINER')" value="TRAINER">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['user', { userRole: 'TRAINER' }]">
         <h1 matLine>Antrenorler</h1>
-      </mat-list-option>
-      <mat-list-option (click)="setUserRole('CO_FOUNDER')" value="CO_FOUNDER">
+      </mat-list-item>
+      <mat-list-item [routerLink]="['user', { userRole: 'CO_FOUNDER' }]">
         <h1 matLine>Kurucular</h1>
-      </mat-list-option>
-    </mat-selection-list>
+      </mat-list-item>
+    </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content>
     <router-outlet></router-outlet>

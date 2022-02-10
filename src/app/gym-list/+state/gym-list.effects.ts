@@ -18,7 +18,7 @@ export class GymListEffects {
 
     loadGymsByLoggedUser = createEffect(() =>
         this.actions$.pipe(
-            ofType(GymListActions.loadGymsByLoggedUser),
+            ofType(GymListActions.loadGymsByLoggedUser, GymListActions.acceptInvitationSuccess, GymListActions.createGymSuccess, GymListActions.updateGymSuccess),
             concatMap(() =>
                 this.gymListService.getGymsByLoggedUser().pipe(
                     map((response) => GymListActions.loadGymsByLoggedUserSuccess({ gyms: response })),
@@ -34,7 +34,7 @@ export class GymListEffects {
             withLatestFrom(this.ngrxDialogFacade.formDialogFormData$),
             concatMap(([_, data]) => 
                 this.gymListService.createGym(data).pipe(
-                    mergeMap((response) => [GymListActions.loadGymsByLoggedUser(), GymListActions.createGymSuccess()]),
+                    map((response) => GymListActions.createGymSuccess()),
                     catchError((error) => of(GymListActions.createGymFail(error))),
                 ),
             ),
@@ -47,8 +47,20 @@ export class GymListEffects {
             withLatestFrom(this.ngrxDialogFacade.formDialogFormData$),
             concatMap(([_, data]) => 
                 this.gymListService.updateGym(data).pipe(
-                    mergeMap((response) => [GymListActions.loadGymsByLoggedUser(), GymListActions.updateGymSuccess()]),
+                    map((response) => GymListActions.updateGymSuccess()),
                     catchError((error) => of(GymListActions.updateGymFail(error))),
+                ),
+            ),
+        ),
+    );
+
+    acceptInvitation = createEffect(() =>
+        this.actions$.pipe(
+            ofType(GymListActions.acceptInvitation),
+            concatMap((action) => 
+                this.gymListService.acceptInvitation(action.gymId).pipe(
+                    map((response) => GymListActions.acceptInvitationSuccess()),
+                    catchError((error) => of(GymListActions.acceptInvitationFail(error))),
                 ),
             ),
         ),

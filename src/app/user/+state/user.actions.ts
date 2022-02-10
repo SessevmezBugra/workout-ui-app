@@ -7,4 +7,4 @@ export const loadUserProfileSuccess = createAction('[user-detail] LOAD_USER_PROF
 
 export const loadUserProfileFailed = createAction('[user-detail] LOAD_USER_PROFILE_FAILED', props<{ error: Error }>());
 
-export const updateIsEqualToLoggedUser = createAction('[user-detail] LOAD_USER_PROFILE', props<{ isEqual: boolean }>());
+// export const updateIsEqualToLoggedUser = createAction('[user-detail] LOAD_USER_PROFILE', props<{ isEqual: boolean }>());

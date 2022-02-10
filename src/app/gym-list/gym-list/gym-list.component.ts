@@ -63,4 +63,10 @@ export class GymListComponent implements OnInit {
     });
   }
 
+  acceptInvitation(gymId: string, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.gymListFacade.acceptInvitation(gymId);
+  }
+
 }

@@ -23,9 +23,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatMenuModule} from '@angular/material/menu';
 import { NgrxDialogModule } from '../ngrx-dialog/ngrx-dialog.module';
-import { UserFacade } from '../user/+state/user.facade';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
+import { GymModule } from '../gym/gym.module';
 
 
 
@@ -55,7 +55,8 @@ import { AuthModule } from '../auth/auth.module';
     MatMenuModule,
     NgrxDialogModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    GymModule
   ],
   providers: [TrainingService, TrainingEffects, TrainingFacade],
 })

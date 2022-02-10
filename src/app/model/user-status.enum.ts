@@ -1,5 +1,4 @@
-export enum UserStatus {
-	INVETED,
-	ACTIVE,
-	DELETED
-}
+export type UserStatus =
+	'INVITED' |
+	'ACTIVE' |
+	'DELETED';

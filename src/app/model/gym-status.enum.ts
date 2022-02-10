@@ -1,4 +1,3 @@
-export enum GymStatus {
-    ACTIVE = "Aktif",
-	DELETED = "Silindi"
-}
+export type GymStatus =
+    "ACTIVE" | 
+	"DELETED";

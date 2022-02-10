@@ -1,11 +1,13 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { gymFeatureKey, GymState } from "./gym.reducer";
 
-const getGym = createFeatureSelector<GymState>(gymFeatureKey);
-export const getGymId = createSelector(getGym, (state: GymState) => state.gymId);
-export const getUserRole = createSelector(getGym, (state: GymState) => state.userRole);
+const getGymState = createFeatureSelector<GymState>(gymFeatureKey);
+export const getGym = createSelector(getGymState, (state: GymState) => state.gym);
+export const getGymUser = createSelector(getGymState, (state: GymState) => state.gymUser);
+export const getGymUsers = createSelector(getGymState, (state: GymState) => state.gymUsers);
 
 export const gymQuery = {
-    getGymId,
-    getUserRole
+    getGym,
+    getGymUser,
+    getGymUsers
 };

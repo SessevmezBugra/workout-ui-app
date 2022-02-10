@@ -29,14 +29,14 @@ export class UserEffects {
         ),
     );
 
-    updateIsEqualToLoggedUser = createEffect(() =>
-        this.actions$.pipe(
-            ofType(UserActions.loadUserProfileSuccess),
-            withLatestFrom(this.authFacade.userProfile$),
-            map(([{user}, authUserProfile]) =>
-                UserActions.updateIsEqualToLoggedUser({ isEqual: user.id == authUserProfile.id}),
-            ),
-        ),
-    );
+    // updateIsEqualToLoggedUser = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(UserActions.loadUserProfileSuccess),
+    //         withLatestFrom(this.authFacade.userProfile$),
+    //         map(([{user}, authUserProfile]) =>
+    //             UserActions.updateIsEqualToLoggedUser({ isEqual: user.id == authUserProfile.id}),
+    //         ),
+    //     ),
+    // );
 
 }

@@ -15,13 +15,9 @@ export class GymDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       if(paramMap.get("id")) {
-        this.gymFacade.setGymId(paramMap.get("id"));
+        this.gymFacade.getGym(paramMap.get("id")!);
       }
     });
-  }
-
-  setUserRole(role: UserRole) {
-    this.gymFacade.setUserRole(role);
   }
 
 }

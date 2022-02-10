@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatListOption } from '@angular/material/list';
+import { MatListOption, MatSelectionListChange } from '@angular/material/list';
 import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
-import { GymUser } from 'src/app/model/gym-user.model';
 import { User } from 'src/app/model/user.model';
 import { UserListFacade } from '../+state/user-list.facade';
 
@@ -30,17 +29,16 @@ export class UserInviteComponent implements OnInit {
       .subscribe((changes: any) => this.userListFacade.searchUser(changes));
   }
 
+  onUserSelected(event: MatSelectionListChange) {
+    let userIds = event.source.selectedOptions.selected.flatMap(option => option.value);
+    this.userListFacade.updateSelectedUserIds(userIds);
+  }
+
   getErrorMessage() {
     if (this.formControl.hasError('required')) {
       return 'Lutfen bu alani bos birakmayiniz';
     }
     return '';
-  }
-
-  sendInvitation(userOptions: MatListOption[]) {
-    let userIds = userOptions.flatMap(option => option.value);
-    this.userListFacade.inviteUsers(userIds)
-
   }
 
   ngOnDestroy() {

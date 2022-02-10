@@ -18,3 +18,9 @@ export const updateGym = createAction('[gym-list] UPDATE_GYM');
 export const updateGymSuccess = createAction('[gym-list] UPDATE_GYM_SUCCESS');
 
 export const updateGymFail = createAction('[gym-list] UPDATE_GYM_FAIL', props<{ error: Error }>());
+
+export const acceptInvitation = createAction('[gym-list] ACCEPT_INVITATION', props<{gymId: string}>());
+
+export const acceptInvitationSuccess = createAction('[gym-list] ACCEPT_INVITATION_SUCCESS');
+
+export const acceptInvitationFail = createAction('[gym-list] ACCEPT_INVITATION_FAIL', props<{ error: Error }>());

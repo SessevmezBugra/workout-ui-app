@@ -17,18 +17,18 @@ export class UserListEffects {
         private userListFacade: UserListFacade
     ) { }
 
-    loadGymUsersByGymIdAndUserRole = createEffect(() =>
-        this.actions$.pipe(
-            ofType(UserListActions.loadGymUsers, UserListActions.setGymUserRole),
-            withLatestFrom(this.userListFacade.gymUserRole$, this.gymFacade.gymId$),
-            concatMap(([_, gymUserRole, gymId]) =>
-                this.userListService.getGymUsersByGymIdAndUserRole(gymId, gymUserRole).pipe(
-                    map((response) => UserListActions.loadGymUsersSuccess({ users: response })),
-                    catchError((error) => of(UserListActions.loadGymUsersFail(error))),
-                ),
-            ),
-        ),
-    );
+    // loadGymUsersByGymIdAndUserRole = createEffect(() =>
+    //     this.actions$.pipe(
+    //         ofType(UserListActions.loadGymUsers, UserListActions.setGymUserRole),
+    //         withLatestFrom(this.userListFacade.gymUserRole$, this.gymFacade.gymId$),
+    //         concatMap(([_, gymUserRole, gymId]) =>
+    //             this.userListService.getGymUsersByGymIdAndUserRole(gymId, gymUserRole).pipe(
+    //                 map((response) => UserListActions.loadGymUsersSuccess({ users: response })),
+    //                 catchError((error) => of(UserListActions.loadGymUsersFail(error))),
+    //             ),
+    //         ),
+    //     ),
+    // );
 
     searchUsersBySearchText = createEffect(() =>
         this.actions$.pipe(
@@ -42,17 +42,6 @@ export class UserListEffects {
         ),
     );
 
-    inviteUsers = createEffect(() =>
-        this.actions$.pipe(
-            ofType(UserListActions.inviteUsers),
-            withLatestFrom(this.userListFacade.gymUserRole$, this.gymFacade.gymId$),
-            concatMap(([action, role, gymId]) =>
-                this.userListService.sendGymInvitationToUsers(gymId, role, action.userIds).pipe(
-                    mergeMap((response) => [UserListActions.inviteUsersSuccess(), UserListActions.loadGymUsers()]),
-                    catchError((error) => of(UserListActions.inviteUsersFail(error))),
-                ),
-            ),
-        ),
-    );
+    
 
 }

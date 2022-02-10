@@ -10,6 +10,7 @@ export interface UserListState {
     gymUsers: Array<GymUser>;
     gymUserRole: UserRole;
     searchedUsers: Array<User>;
+    selectedUserIds: Array<string>;
 }
 
 export interface UserRootState {
@@ -19,15 +20,12 @@ export interface UserRootState {
 export const userListInitialState: UserListState = {
     gymUsers: [],
     gymUserRole: 'ATHLETE',
-    searchedUsers: []
+    searchedUsers: [],
+    selectedUserIds: []
 }
 
 const reducer = createReducer(
     userListInitialState,
-    on(UserListActions.loadGymUsersSuccess, (state, action) => ({
-        ...state,
-        gymUsers: action.users
-    })),
     on(UserListActions.setGymUserRole, (state, action) => ({
         ...state,
         gymUserRole: action.role
@@ -35,6 +33,10 @@ const reducer = createReducer(
     on(UserListActions.searchUserSuccess, (state, action) => ({
         ...state,
         searchedUsers: action.users
+    })),
+    on(UserListActions.updateSelectedUsers, (state, action) => ({
+        ...state,
+        selectedUserIds: action.userIds
     })),
 );
 

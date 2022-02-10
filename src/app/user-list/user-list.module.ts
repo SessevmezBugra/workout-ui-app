@@ -27,8 +27,7 @@ import { UserListRoutingModule } from './user-list-routing.module';
   ],
   imports: [
     CommonModule,
-    UserListRoutingModule,
-    CommonModule,
+    // UserListRoutingModule,
     MatListModule,
     StoreModule.forFeature(userListFeatureKey, userListReducer, {
       initialState: userListInitialState,
@@ -40,7 +39,10 @@ import { UserListRoutingModule } from './user-list-routing.module';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    GymModule
+    // GymModule
+  ],
+  exports: [
+    UserListComponent
   ],
   providers: [UserListService, UserListEffects, UserListFacade]
 })

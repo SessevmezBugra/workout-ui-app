@@ -9,15 +9,11 @@ import { go } from "src/app/ngrx-router/+state/router.actions";
 @Injectable()
 export class UserListFacade {
 
-    gymUsers$ = this.store.select(userListQuery.getGymUsers);
     gymUserRole$ = this.store.select(userListQuery.getGymUserRole);
     searchedUsers$ = this.store.select(userListQuery.getSearchedUsers);
+    selectedUserIds$ = this.store.select(userListQuery.getSelectedUserIds);
 
     constructor(private store: Store<UserListState>) { }
-
-    loadGymUsersByGymIdAndUserRole() {
-        this.store.dispatch(UserListActions.loadGymUsers());
-    }
 
     setGymUserRole(role: UserRole) {
         this.store.dispatch(UserListActions.setGymUserRole({role}));
@@ -27,11 +23,12 @@ export class UserListFacade {
         this.store.dispatch(UserListActions.searchUser({search}));
     }
 
-    inviteUsers(userIds: Array<string>) {
-        this.store.dispatch(UserListActions.inviteUsers({userIds}));
-    }
-
     navigateToUserDetail(userId: string) {
         this.store.dispatch(go({ to: { path: ['/user', userId] } }));
     }
+
+    updateSelectedUserIds(userIds: Array<string>) {
+        this.store.dispatch(UserListActions.updateSelectedUsers({userIds: userIds}));
+    }
+    
 }
