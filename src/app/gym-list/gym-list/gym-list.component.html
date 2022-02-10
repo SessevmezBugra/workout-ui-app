@@ -2,7 +2,7 @@
    Salon Olustur
  </button>
 <mat-nav-list>
-  <mat-list-item [routerLink]="gym.id" *ngFor="let gym of gymList$ | async" [disableRipple]="false">
+  <mat-list-item [routerLink]="gym.id" *ngFor="let gym of gymList$ | async" [disabled]="gym.userStatus == 'INVITED'">
     <h1 matLine>{{ gym.name }}</h1>
     <h3 matLine> {{ gym.userStatus }} </h3>
     <div *ngIf="gym.userStatus == 'INVITED'" >
