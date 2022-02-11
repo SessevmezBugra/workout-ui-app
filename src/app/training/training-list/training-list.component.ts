@@ -22,7 +22,7 @@ export class TrainingListComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger!: QueryList<MatMenuTrigger>;
 
   displayedColumns: string[] = ['name', 'desc', 'createdBy', 'createdDate'];
-  trainings$!: Observable<Array<Training>>;
+  trainings$: Observable<Array<Training>> = this.trainingFacade.trainings$;
   user$!: Observable<User>;
   loggedUser$!: Observable<Keycloak.KeycloakProfile>;
   isLoggedIn$!: Observable<boolean>;
@@ -40,11 +40,6 @@ export class TrainingListComponent implements OnInit {
     private gymFacade: GymFacade) { }
 
   ngOnInit(): void {
-    this.trainings$ = this.trainingFacade.trainings$;
-    this.user$ = this.userFacade.user$;
-    this.loggedUser$ = this.authFacade.userProfile$;
-    this.isLoggedIn$ = this.authFacade.isLoggedIn$;
-    this.loggedGymUser$ = this.gymFacade.gymUser$;
 
 
     // this.user$ = this.trainingFacade.user$;
@@ -65,9 +60,9 @@ export class TrainingListComponent implements OnInit {
     //   }
     // });
 
-    this.isLoggedIn$
+    this.authFacade.isLoggedIn$
       .pipe(
-        isLoggedIn$ => combineLatest([isLoggedIn$, this.loggedUser$, this.user$, this.loggedGymUser$]),
+        isLoggedIn$ => combineLatest([isLoggedIn$, this.authFacade.userProfile$, this.userFacade.user$, this.gymFacade.gymUser$]),
       ).subscribe(([isLoggedIn, loggedUser, user, loggedGymUser]) => {
         this.isLoggedIn = isLoggedIn;
         if(isLoggedIn) {
